@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ecualizador de 3 Bandas - Proyecto Profesional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #1e40af;
+      --accent-color: #f59e0b;
+      --dark-bg: #0f172a;
+      --light-bg: #f8fafc;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --border-color: #e2e8f0;
+    }
+
+    * {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: var(--text-primary);
+    }
+
+    .navbar-custom {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-link {
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-color) !important;
+      transform: translateY(-2px);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 50%;
+      background: var(--accent-color);
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+      left: 0;
+    }
+
+    .main-content {
+      background: white;
+      margin: 2rem 0;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 4rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      font-weight: 300;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .section-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .section-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-title i {
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.5rem;
+    }
+
+    .image-container {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      background: #f8fafc;
+      position: relative;
+    }
+
+    .image-container:hover {
+      transform: scale(1.02);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      max-height: 400px;
+      object-fit: contain;
+      display: block;
+      transition: all 0.3s ease;
+    }
+
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(37, 99, 235, 0.8), rgba(139, 92, 246, 0.8));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    .image-container:hover .image-overlay {
+      opacity: 1;
+    }
+
+    .process-section {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      padding: 3rem 0;
+      margin: 3rem 0;
+      border-radius: 20px;
+    }
+
+    .process-step {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid var(--accent-color);
+      transition: all 0.3s ease;
+    }
+
+    .process-step:hover {
+      transform: translateX(8px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      color: white;
+      border-radius: 50%;
+      font-weight: 700;
+      margin-right: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .step-title {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .spec-card {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+
+    .spec-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .footer-custom {
+      background: var(--dark-bg);
+      color: white;
+      padding: 2rem 0;
+      margin-top: 4rem;
+      text-align: center;
+    }
+
+    .btn-custom {
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.2rem;
+        line-height: 1.2;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+        padding: 0 1rem;
+      }
+      
+      .section-card {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .process-step {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .image-container img {
+        max-height: 250px;
+      }
+      
+      .specs-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .spec-card {
+        padding: 1rem;
+      }
+      
+      .spec-icon {
+        font-size: 2rem;
+      }
+      
+      .step-number {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+        margin-right: 0.75rem;
+      }
+      
+      .step-title {
+        font-size: 1.1rem;
+      }
+      
+      .hero-section {
+        padding: 2.5rem 0;
+      }
+      
+      .main-content {
+        margin: 1rem 0;
+        border-radius: 15px;
+      }
+      
+      .process-section {
+        padding: 2rem 0;
+        margin: 2rem 0;
+        border-radius: 15px;
+      }
+      
+      .navbar-brand {
+        font-size: 1.3rem;
+      }
+      
+      .section-title {
+        font-size: 1.3rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+      }
+      
+      .section-title i {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero-title {
+        font-size: 1.8rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .section-card {
+        padding: 1rem;
+      }
+      
+      .process-step {
+        padding: 1rem;
+      }
+      
+      .image-container img {
+        max-height: 200px;
+      }
+      
+      .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      
+      .display-4 {
+        font-size: 1.8rem;
+      }
+      
+      .lead {
+        font-size: 1rem;
+      }
+      
+      .btn-custom {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <i class="fas fa-microchip me-2"></i>
+        Mi Blog Analógico
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="index.html">
+              <i class="fas fa-home me-1"></i>Inicio
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white active" href="ecualizador-3-bandas.html">
+              <i class="fas fa-sliders-h me-1"></i>Ecualizador
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div style="height: 80px;"></div>
+
+  <div class="container-fluid px-0">
+    <div class="main-content">
+      
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="container">
+          <div class="hero-content text-center">
+            <h1 class="hero-title">
+              <i class="fas fa-equalizer me-3"></i>
+              Ecualizador Activo de 3 Bandas
+            </h1>
+            <p class="hero-subtitle">
+              Proyecto profesional de diseño y construcción de un ecualizador activo analógico<br>
+              con control independiente de frecuencias bajas, medias y altas
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Specifications -->
+      <section class="container my-5">
+        <div class="specs-grid">
+          <div class="spec-card">
+            <i class="fas fa-microchip spec-icon"></i>
+            <h5>Componentes</h5>
+            <p>TL072, LM3915, potenciómetros y resistencias de precisión</p>
+          </div>
+          <div class="spec-card">
+            <i class="fas fa-wave-square spec-icon"></i>
+            <h5>3 Bandas</h5>
+            <p>Control independiente de bajos, medios y agudos</p>
+          </div>
+          <div class="spec-card">
+            <i class="fas fa-bolt spec-icon"></i>
+            <h5>Activo</h5>
+            <p>Amplificación y ecualización en una sola etapa</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="container">
+        
+        <!-- Diseños Técnicos -->
+        <section class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-drafting-compass"></i>
+            Diseños Técnicos y Esquemáticos
+          </h2>
+          
+          <div class="row g-4">
+            <div class="col-lg-6 col-md-12">
+              <h4 class="mb-3"><i class="fas fa-microchip me-2 text-primary"></i>Diseño del PCB</h4>
+              <div class="image-container">
+                <img src="img/Captura.png" alt="Diseño PCB" class="img-fluid">
+                <div class="image-overlay">
+                  <span>Ver diseño completo</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-12">
+              <h4 class="mb-3"><i class="fas fa-plug me-2 text-primary"></i>Esquemático de Fuente</h4>
+              <div class="image-container">
+                <img src="img/esquematico.PNG" alt="Esquema fuente y potencia" class="img-fluid">
+                <div class="image-overlay">
+                  <span>Ampliar esquema</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Conexiones -->
+        <section class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-project-diagram"></i>
+            Diagramas de Conexión
+          </h2>
+          
+          <div class="row g-4">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <h5 class="mb-3">Transformador Principal</h5>
+              <div class="image-container">
+                <img src="img/conexion_2.png" alt="Conexión transformador y fusible" class="img-fluid">
+                <div class="image-overlay">
+                  <span>Ver conexión</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <h5 class="mb-3">Sistema Completo</h5>
+              <div class="image-container">
+                <img src="img/conexion_ecualizador_+etapa_de_potencia.png" alt="Conexión completa" class="img-fluid">
+                <div class="image-overlay">
+                  <span>Ver diagrama</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-12 col-sm-12">
+              <h5 class="mb-3">Controles de Audio</h5>
+              <div class="image-container">
+                <img src="img/conexión.png" alt="Conexión volumen" class="img-fluid">
+                <div class="image-overlay">
+                  <span>Ver controles</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row g-4 mt-3">
+            <div class="col-lg-6 col-md-12">
+              <h5 class="mb-3">Detalle del Transformador</h5>
+              <div class="image-container">
+                <img src="img/Conexión_transformaador.PNG " alt="Transformador simple" class="img-fluid">
+                <div class="image-overlay">
+                  <span>Vista detallada</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-12">
+              <h5 class="mb-3">Potenciómetros y RCA</h5>
+              <div class="image-container">
+                <img src="img/pot.PNG" alt="Potenciómetro y RCA" class="img-fluid">
+                <div class="image-overlay">
+                  <span>Ver componentes</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Resultado Final -->
+        <section class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-trophy"></i>
+            Proceso
+          </h2>
+          <div class="text-center">
+            <div class="image-container d-inline-block">
+              <img src="img/Presentación1.png" alt="Vista final del proyecto" class="img-fluid" style="max-width: 600px;">
+              <div class="image-overlay">
+                <span>Proyecto Final</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-4">
+            <a href="#proceso" class="btn-custom">
+              <i class="fas fa-arrow-down me-2"></i>Ver Proceso de Fabricación
+            </a>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Proceso de Fabricación -->
+      <section id="proceso" class="process-section">
+        <div class="container">
+          <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold text-primary">
+              <i class="fas fa-cogs me-3"></i>
+              Proceso de Fabricación
+            </h2>
+            <p class="lead text-secondary">Documentación completa del proceso de construcción paso a paso</p>
+          </div>
+
+          <div class="process-step">
+            <h4 class="step-title">
+              <span class="step-number">1</span>
+              Impresión de Máscaras
+            </h4>
+            <div class="image-container">
+              <img src="img/proceso1.png" class="img-fluid">
+              <div class="image-overlay">
+                <span>Preparación de máscaras</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <h4 class="step-title">
+              <span class="step-number">2</span>
+              Preparación de la Placa de Cobre
+            </h4>
+            <div class="image-container">
+              <img src="img/proceso2.png" class="img-fluid">
+              <div class="image-overlay">
+                <span>Placa lista para grabado</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <h4 class="step-title">
+              <span class="step-number">3</span>
+              Transferencia Térmica
+            </h4>
+            <div class="image-container">
+              <img src="img/proceso3.png" class="img-fluid">
+              <div class="image-overlay">
+                <span>Proceso de transferencia</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <h4 class="step-title">
+              <span class="step-number">4</span>
+              Revelado en Ácido
+            </h4>
+            <div class="image-container">
+              <img src="img/proceso4.png" class="img-fluid">
+              <div class="image-overlay">
+                <span>Grabado químico</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <h4 class="step-title">
+              <span class="step-number">5</span>
+              Perforado de la Placa
+            </h4>
+            <div class="image-container">
+              <img src="img/proceso6.png" class="img-fluid">
+              <div class="image-overlay">
+                <span>Perforaciones de precisión</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <h4 class="step-title">
+              <span class="step-number">6</span>
+              Soldadura de Componentes
+            </h4>
+            <div class="row g-3">
+              <div class="col-lg-6 col-md-12">
+                <div class="image-container">
+                  <img src="img/proceso7.png" class="img-fluid">
+                  <div class="image-overlay">
+                    <span>Soldadura inicial</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12">
+                <div class="image-container">
+                  <img src="img/proceso8.png" class="img-fluid">
+                  <div class="image-overlay">
+                    <span>Componentes soldados</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <h4 class="step-title">
+              <span class="step-number">7</span>
+              Ensamblaje del Ecualizador
+            </h4>
+            <div class="image-container">
+              <img src="img/proceso9.png" class="img-fluid">
+              <div class="image-overlay">
+                <span>Montaje en carcasa</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <h4 class="step-title">
+              <span class="step-number">8</span>
+              Conexión Eléctrica Final
+            </h4>
+            <div class="image-container">
+              <img src="img/proceso11.png" class="img-fluid">
+              <div class="image-overlay">
+                <span>Conexiones finales</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <h4 class="step-title">
+              <span class="step-number">9</span>
+              Pruebas del Sistema Completo
+            </h4>
+            <div class="image-container">
+              <img src="img/proceso12.png" class="img-fluid">
+              <div class="image-overlay">
+                <span>Testing final</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <footer class="footer-custom">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5><i class="fas fa-microchip me-2"></i>Mi Blog Analógico</h5>
+          <p>Proyectos de electrónica analógica y digital</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p>&copy; 2025 Mi Blog Analógico. Todos los derechos reservados.</p>
+          <div class="mt-3">
+            <a href="https://github.com/rodrigovidalg/Blog_electronica_analogicaW" class="text-white me-3"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add loading animation to images
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('load', function() {
+        this.style.opacity = '1';
+      });
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('.section-card, .process-step').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
