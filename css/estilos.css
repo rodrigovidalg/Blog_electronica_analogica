@@ -53,3 +53,24 @@ h1, h2 {
     border-radius: 5px;
     object-fit: cover;
 }
+.vista-activa {
+  display: block;
+}
+.vista-inactiva {
+  display: none;
+}
+
+.btn-custom.active {
+  background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+}
+
+.vista-activa {
+  display: block;
+}
+.vista-inactiva {
+  display: none;
+}
+
+.btn-custom.active {
+  background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+}
